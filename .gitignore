@@ -1,0 +1,28 @@
+# Root gitignore
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment Variables & API Keys
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Local Database Files
+database/db_data/
+**/db_data/
+
+# Uploaded Files
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Build Directories
+frontend/dist/
+dist/
+
+# Logs
+*.log
+backend/*.log
+frontend/*.log

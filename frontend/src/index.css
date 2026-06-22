@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #121212;
+    color: #e5e5e5;
+    @apply font-sans antialiased overflow-x-hidden;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.04) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.03) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(168, 85, 247, 0.01) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  @apply bg-slate-900/60 backdrop-blur-md border border-slate-800/80 shadow-2xl;
+}
+
+.glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(192, 193, 255, 0.3);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+  transform: translateY(-4px);
+}
+
+.hero-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(60px);
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #c0c1ff, #d0bcff, #c0c1ff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+.magnetic-hover:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 40px rgba(192, 193, 255, 0.2);
+}
+
+.gradient-border-btn {
+  position: relative;
+  background: linear-gradient(to right, #6366F1, #8B5CF6);
+  overflow: hidden;
+}
+
+.gradient-border-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.glass-input {
+  @apply bg-slate-950/80 border border-slate-800 rounded-lg py-2 px-4 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30 transition-all;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-800 rounded-full hover:bg-slate-700 transition-all;
+}
+
+/* Keyframe Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+.glow-overlay {
+  animation: pulse-glow 8s infinite ease-in-out;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 font-bold;
+}
+
+/* React Flow custom visual styling */
+.react-flow__node {
+  @apply border-0 !important;
+}
+
+.react-flow__edge-path {
+  @apply stroke-slate-700 stroke-2 !important;
+}
+
+.react-flow__connection-path {
+  @apply stroke-indigo-500 stroke-2 !important;
+}
+
+.react-flow__controls {
+  @apply glass-panel rounded-lg overflow-hidden border border-slate-800 !important;
+}
+
+.react-flow__controls-button {
+  @apply bg-slate-900/80 hover:bg-indigo-600/30 border-b border-slate-800 text-slate-300 fill-slate-300 !important;
+}
+
+.react-flow__minimap {
+  @apply glass-panel rounded-lg border border-slate-800/80 !important;
+}
+
+.react-flow__handle {
+  @apply bg-slate-700 border-2 border-slate-950 w-2.5 h-2.5 !important;
+}
+
+@layer utilities {
+  .bg-\[\#0b1326\] {
+    background-color: #121212 !important;
+  }
+  .bg-\[\#131b2e\] {
+    background-color: #222222 !important;
+  }
+  .bg-\[\#060e20\] {
+    background-color: #1a1a1a !important;
+  }
+  .text-\[\#dae2fd\] {
+    color: #e5e5e5 !important;
+  }
+  .text-\[\#c7c4d7\] {
+    color: #a3a3a3 !important;
+  }
+  .text-\[\#c0c1ff\] {
+    color: #a855f7 !important;
+  }
+  .text-\[\#ffdcc5\] {
+    color: #2563eb !important;
+  }
+  .border-\[\#c0c1ff\] {
+    border-color: #a855f7 !important;
+  }
+  .border-\[\#ffdcc5\] {
+    border-color: #2563eb !important;
+  }
+  .bg-\[\#c0c1ff\] {
+    background-color: #a855f7 !important;
+  }
+  .bg-\[\#ffdcc5\] {
+    background-color: #2563eb !important;
+  }
+}
