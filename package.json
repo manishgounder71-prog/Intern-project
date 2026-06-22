@@ -1,0 +1,12 @@
+{
+  "name": "studygen-workspace",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "database"
+  ],
+  "scripts": {
+    "start": "node backend/server.js"
+  }
+}

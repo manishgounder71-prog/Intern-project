@@ -11,7 +11,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import fs from 'fs';
 import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(import.meta.dirname, '.env') });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('⚠️ Unhandled Rejection at:', promise, 'reason:', reason);
@@ -79,7 +79,7 @@ mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 })
     console.warn('⚠️ MongoDB connection failed:', error.message);
     console.warn('⚠️ Attempting persistent fallback database server...');
     try {
-      const dbPath = path.resolve('../database/db_data');
+      const dbPath = path.resolve(import.meta.dirname, '../database/db_data');
       if (!fs.existsSync(dbPath)) {
         fs.mkdirSync(dbPath, { recursive: true });
       }
