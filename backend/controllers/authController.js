@@ -111,10 +111,12 @@ export const forgotPassword = async (req, res, next) => {
     user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
     await user.save();
 
-    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${token}`;
-    console.log(`[DEV] Password reset link: ${resetUrl}`);
+    console.log(`[DEV] Password reset token: ${token}`);
 
-    res.json({ message: 'Password reset link has been sent to your email (check server console in dev mode).' });
+    res.json({
+      message: 'Use the link below to reset your password (expires in 1 hour).',
+      resetToken: token
+    });
   } catch (error) {
     next(error);
   }

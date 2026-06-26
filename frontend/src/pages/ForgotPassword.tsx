@@ -8,6 +8,7 @@ const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [resetLink, setResetLink] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,6 +16,7 @@ const ForgotPassword: React.FC = () => {
 
     setLoading(true);
     setMessage(null);
+    setResetLink('');
 
     try {
       const data = await apiFetch('/auth/forgot-password', {
@@ -23,6 +25,9 @@ const ForgotPassword: React.FC = () => {
         body: JSON.stringify({ email })
       });
       setMessage({ type: 'success', text: data.message });
+      if (data.resetToken) {
+        setResetLink(`${window.location.origin}/reset-password/${data.resetToken}`);
+      }
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message || 'Failed to send reset link.' });
     } finally {
@@ -65,6 +70,18 @@ const ForgotPassword: React.FC = () => {
             }`}>
               {message.type === 'success' ? <CheckCircle size={14} className="flex-shrink-0" /> : <AlertCircle size={14} className="flex-shrink-0" />}
               <span>{message.text}</span>
+            </div>
+          )}
+
+          {resetLink && (
+            <div className="bg-[#131b2e] border border-indigo-500/20 rounded-xl p-4 text-center space-y-2">
+              <p className="text-xs text-[#c7c4d7]">Click the link below to reset your password (expires in 1 hour):</p>
+              <a
+                href={resetLink}
+                className="text-sm text-indigo-400 hover:text-indigo-300 font-medium break-all hover:underline"
+              >
+                {resetLink}
+              </a>
             </div>
           )}
 
