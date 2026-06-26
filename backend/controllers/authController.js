@@ -3,6 +3,7 @@ import Document from '../../database/models/Document.js';
 import Flashcard from '../../database/models/Flashcard.js';
 import Quiz from '../../database/models/Quiz.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'studygen-secret-super-key-2026';
 
@@ -88,6 +89,61 @@ export const login = async (req, res, next) => {
         avatar: user.avatar
       }
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Please provide your email address.' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'No account found with this email address.' });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+    await user.save();
+
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${token}`;
+    console.log(`[DEV] Password reset link: ${resetUrl}`);
+
+    res.json({ message: 'Password reset link has been sent to your email (check server console in dev mode).' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({ error: 'Please provide a new password.' });
+    }
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Reset token is invalid or has expired.' });
+    }
+
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Password has been reset successfully. You can now log in with your new password.' });
   } catch (error) {
     next(error);
   }

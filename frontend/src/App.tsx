@@ -11,6 +11,8 @@ const Library = lazy(() => import('./pages/Library'));
 const StudyArena = lazy(() => import('./pages/StudyArena'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Profile = lazy(() => import('./pages/Profile'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 
 const PageLoader: React.FC = () => (
   <div className="flex-1 flex flex-col items-center justify-center min-h-[500px] text-center space-y-4">
@@ -64,6 +66,22 @@ const App: React.FC = () => {
             element={
               <GuestRoute>
                 <Register />
+              </GuestRoute>
+            } 
+          />
+          <Route 
+            path="/forgot-password" 
+            element={
+              <GuestRoute>
+                <ForgotPassword />
+              </GuestRoute>
+            } 
+          />
+          <Route 
+            path="/reset-password/:token" 
+            element={
+              <GuestRoute>
+                <ResetPassword />
               </GuestRoute>
             } 
           />

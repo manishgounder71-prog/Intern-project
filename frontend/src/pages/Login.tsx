@@ -79,6 +79,12 @@ const Login: React.FC = () => {
             />
           </div>
 
+          <div className="flex justify-end">
+            <Link to="/forgot-password" className="text-xs text-indigo-400 hover:underline font-medium">
+              Forgot Password?
+            </Link>
+          </div>
+
           {errorMsg && (
             <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs flex gap-2 items-center">
               <AlertCircle size={14} className="flex-shrink-0" />
