@@ -220,8 +220,8 @@ const processDocumentInBackground = async (document, filePath, mimeType, userId,
       const subject = document.subject || document.name.replace(/\.[^/.]+$/, '');
       studyMaterials = {
         graph: getMockSubjectGraph(subject),
-        flashcards: generateMockFlashcards(),
-        quiz: generateMockQuiz(document.name)
+        flashcards: generateMockFlashcards(subject),
+        quiz: generateMockQuiz(document.name, subject)
       };
     }
 

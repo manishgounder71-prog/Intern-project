@@ -950,7 +950,22 @@ function generateMockGraph() {
   };
 }
 
-export function generateMockFlashcards() {
+export function generateMockFlashcards(subject = '') {
+  const sub = subject.toUpperCase();
+  if (sub.includes('OS') || sub.includes('OPERATING') || sub.includes('PROCESS') || sub.includes('MEMORY') || sub.includes('THREAD')) {
+    return [
+      { front: 'What is a Process?', back: 'A process is a program in execution, with its own memory space, registers, and state.' },
+      { front: 'What is Virtual Memory?', back: 'A technique that gives processes the illusion of a large, contiguous address space by using disk as an extension of RAM.' },
+      { front: 'What is a Deadlock?', back: 'A situation where two or more processes are unable to proceed because each is waiting for a resource held by another.' }
+    ];
+  }
+  if (sub.includes('DBMS') || sub.includes('DATABASE')) {
+    return [
+      { front: 'What is Normalization?', back: 'The process of organizing database tables to reduce data redundancy and improve data integrity.' },
+      { front: 'What is ACID?', back: 'Atomicity, Consistency, Isolation, Durability — four properties guaranteeing reliable database transactions.' },
+      { front: 'What is a B-Tree Index?', back: 'A self-balancing tree data structure that maintains sorted data and allows searches, insertions, and deletions in O(log n).' }
+    ];
+  }
   return [
     { front: 'What is RAG in AI?', back: 'Retrieval-Augmented Generation. It queries external documents to supply models with accurate, up-to-date facts.' },
     { front: 'How does Spaced Repetition work?', back: 'It prompts users to review cards at expanding intervals (1 day, 3 days, 7 days) to reinforce memory retention.' },
@@ -958,9 +973,48 @@ export function generateMockFlashcards() {
   ];
 }
 
-export function generateMockQuiz(title) {
+export function generateMockQuiz(title, subject = '') {
+  const sub = subject.toUpperCase();
+  if (sub.includes('OS') || sub.includes('OPERATING') || sub.includes('PROCESS') || sub.includes('MEMORY') || sub.includes('THREAD')) {
+    return {
+      title: `OS Quiz: ${title}`,
+      questions: [
+        {
+          question: 'Which scheduling algorithm can cause starvation of shorter processes?',
+          options: ['FCFS', 'SJF', 'Round Robin', 'None of the above'],
+          correctAnswerIndex: 1,
+          explanation: 'Shortest Job First (SJF) can starve longer processes if shorter processes keep arriving.'
+        },
+        {
+          question: 'What is the purpose of a page table?',
+          options: ['Map virtual addresses to physical addresses', 'Store process instructions', 'Manage CPU registers', 'Handle interrupts'],
+          correctAnswerIndex: 0,
+          explanation: 'A page table maps virtual page numbers to physical frame numbers in virtual memory systems.'
+        }
+      ]
+    };
+  }
+  if (sub.includes('DBMS') || sub.includes('DATABASE')) {
+    return {
+      title: `DBMS Quiz: ${title}`,
+      questions: [
+        {
+          question: 'Which normal form eliminates transitive dependencies?',
+          options: ['1NF', '2NF', '3NF', 'BCNF'],
+          correctAnswerIndex: 2,
+          explanation: 'Third Normal Form (3NF) removes transitive dependencies where a non-key attribute depends on another non-key attribute.'
+        },
+        {
+          question: 'What does the ACID "I" stand for?',
+          options: ['Integrity', 'Isolation', 'Indexing', 'Inheritance'],
+          correctAnswerIndex: 1,
+          explanation: 'Isolation ensures concurrent transactions execute without interfering with each other.'
+        }
+      ]
+    };
+  }
   return {
-    title: `Mock Quiz: ${title}`,
+    title: `Quiz: ${title}`,
     questions: [
       {
         question: 'Which component is used to map concepts visually in the companion frontend?',
@@ -1035,6 +1089,26 @@ export function getMockSubjectGraph(subject) {
         { id: 'e-mat-trans', source: 'matrices', target: 'linear_trans', label: 'represents' },
         { id: 'e-vec-trans', source: 'vectors', target: 'linear_trans', label: 'transformed by' },
         { id: 'e-trans-eigen', source: 'linear_trans', target: 'eigenvalues', label: 'characterizes' }
+      ]
+    };
+  }
+
+  if (subUpper.includes('OS') || subUpper.includes('OPERATING') || subUpper.includes('PROCESS') || subUpper.includes('MEMORY') || subUpper.includes('THREAD') || subUpper.includes('FILE SYSTEM')) {
+    return {
+      nodes: [
+        { id: 'os_core', label: 'Operating System', description: 'System software managing hardware and software resources.', group: 'core' },
+        { id: 'process_mgmt', label: 'Process Management', description: 'Creation, scheduling, and termination of processes.', group: 'core' },
+        { id: 'memory_mgmt', label: 'Memory Management', description: 'Allocation and deallocation of memory to processes.', group: 'core' },
+        { id: 'file_systems', label: 'File Systems', description: 'Organization, storage, and retrieval of data on disk.', group: 'core' },
+        { id: 'scheduling', label: 'CPU Scheduling', description: 'Algorithms for deciding which process runs next.', group: 'advanced' },
+        { id: 'deadlocks', label: 'Deadlocks', description: 'Detection, prevention, and avoidance of resource conflicts.', group: 'advanced' }
+      ],
+      edges: [
+        { id: 'e-os-proc', source: 'os_core', target: 'process_mgmt', label: 'manages' },
+        { id: 'e-os-mem', source: 'os_core', target: 'memory_mgmt', label: 'manages' },
+        { id: 'e-os-file', source: 'os_core', target: 'file_systems', label: 'manages' },
+        { id: 'e-proc-sched', source: 'process_mgmt', target: 'scheduling', label: 'uses' },
+        { id: 'e-proc-dead', source: 'process_mgmt', target: 'deadlocks', label: 'may encounter' }
       ]
     };
   }
@@ -1168,6 +1242,56 @@ export function getMockNodeDetails(label) {
       formulas: "Matrix System: A x = b.",
       diagram: "graph TD\n  Spaces[Vector Spaces] --> Maps[Linear Transformations]\n  Maps --> Matrices[Matrices & Operations]\n  Matrices --> Systems[Systems of Linear Equations]",
       relatedTopics: ['Matrices & Systems', 'Vectors & Spaces'],
+    },
+
+    // --- OPERATING SYSTEMS ---
+    'operating system': {
+      definition: "An Operating System is system software that manages computer hardware and software resources and provides common services for application programs.",
+      explanation: "The OS acts as an intermediary between users and the computer hardware. It handles process management (creating, scheduling, terminating processes), memory management (allocating/deallocating memory), file system management (organizing storage), and device management (controlling I/O devices). Key OS concepts include multitasking, virtual memory, and system calls.",
+      example: "Windows, Linux, and macOS are popular operating systems. Linux powers most web servers, while Android (a Linux-based OS) dominates mobile devices.",
+      formulas: "OS Services: Process Management + Memory Management + File System + I/O Management + Protection.",
+      diagram: "graph TD\n  User[User/Application] -->|System Call| OS[Operating System Kernel]\n  OS --> HW[Hardware: CPU, Memory, Disk, I/O]\n  OS --> Proc[Process Manager]\n  OS --> Mem[Memory Manager]\n  OS --> File[File System Manager]",
+      relatedTopics: ['Process Management', 'Memory Management', 'File Systems'],
+    },
+    'process management': {
+      definition: "Process Management involves the creation, scheduling, synchronization, and termination of processes in an operating system.",
+      explanation: "A process is a program in execution. The OS manages processes using Process Control Blocks (PCB) that store process state, program counter, registers, and memory limits. Process states include New, Ready, Running, Waiting, and Terminated. Scheduling algorithms (FCFS, SJF, Round Robin, Priority) determine which process gets CPU time.",
+      example: "When you open Chrome, the OS creates a new process for it. If you have multiple tabs, Chrome may spawn child processes for each tab.",
+      formulas: "Process States: New → Ready ⇄ Running → Terminated; Running → Waiting → Ready.",
+      diagram: "graph TD\n  New[New] --> Ready[Ready Queue]\n  Ready --> Running[Running on CPU]\n  Running --> Terminated[Terminated]\n  Running --> Waiting[Waiting for I/O]\n  Waiting --> Ready",
+      relatedTopics: ['Operating System', 'CPU Scheduling', 'Deadlocks'],
+    },
+    'memory management': {
+      definition: "Memory Management is the OS function responsible for allocating and deallocating memory space to processes and managing the flow of data between main memory and disk.",
+      explanation: "The OS tracks which parts of memory are currently in use and by whom. It uses techniques like paging (dividing memory into fixed-size pages), segmentation (dividing into variable-size segments), and virtual memory (using disk as extension of RAM). Page replacement algorithms (FIFO, LRU, Optimal) decide which pages to swap out when memory is full.",
+      example: "When you run many applications simultaneously, virtual memory allows the OS to swap inactive pages to disk, keeping active pages in RAM.",
+      formulas: "Virtual Address → Page Table → Physical Frame. Page Fault → Swap In from Disk.",
+      diagram: "graph TD\n  VA[Virtual Address] --> PT[Page Table Lookup]\n  PT -->|Hit| PF[Physical Frame]\n  PT -->|Page Fault| Disk[Swap from Disk]\n  Disk --> PF",
+      relatedTopics: ['Operating System', 'Process Management', 'File Systems'],
+    },
+    'file systems': {
+      definition: "File Systems are the methods and data structures that an operating system uses to organize, store, retrieve, and manage data on storage devices.",
+      explanation: "The OS provides a file system that gives users a logical view of storage. Files are organized into directories (folders). Common file systems include NTFS (Windows), ext4 (Linux), and APFS (macOS). The OS manages disk space allocation using techniques like contiguous, linked, or indexed allocation. Inodes store metadata about files.",
+      example: "When you save a document, the file system allocates disk blocks, updates the directory structure, and stores the file's metadata (name, size, permissions).",
+      formulas: "File Operations: create, read, write, delete, seek. Allocation: Contiguous / Linked / Indexed.",
+      diagram: "graph TD\n  File[File: report.pdf] --> Inode[Inode: Metadata & Block Pointers]\n  Inode --> Blocks[Data Blocks on Disk]\n  Dir[Directory] --> File",
+      relatedTopics: ['Operating System', 'Memory Management', 'Process Management'],
+    },
+    'cpu scheduling': {
+      definition: "CPU Scheduling is the process by which the operating system decides which ready process will be assigned the CPU for execution.",
+      explanation: "The scheduler manages the ready queue and selects processes based on scheduling algorithms. Key algorithms include First-Come-First-Served (FCFS), Shortest Job First (SJF), Round Robin (time quantum), and Priority Scheduling. Metrics include throughput, turnaround time, waiting time, and response time.",
+      example: "Round Robin scheduling gives each process a fixed time slice (e.g., 10ms), then moves it to the back of the ready queue, ensuring fair CPU sharing.",
+      formulas: "Turnaround Time = Completion Time - Arrival Time. Waiting Time = Turnaround Time - Burst Time.",
+      diagram: "graph TD\n  RQ[Ready Queue] --> Scheduler{CPU Scheduler}\n  Scheduler -->|FCFS/SJF/RR| CPU[CPU Execution]\n  CPU --> Done[Process Complete]",
+      relatedTopics: ['Process Management', 'Operating System', 'Deadlocks'],
+    },
+    'deadlocks': {
+      definition: "A Deadlock is a situation where two or more processes are blocked forever, each waiting for a resource held by another process in the set.",
+      explanation: "Deadlocks occur when four conditions hold simultaneously: Mutual Exclusion (resources can't be shared), Hold and Wait (processes hold resources while waiting), No Preemption (resources can't be forcibly taken), and Circular Wait (circular chain of processes waiting). The OS can prevent, avoid (Banker's Algorithm), or detect deadlocks.",
+      example: "Process A holds Resource 1 and waits for Resource 2, while Process B holds Resource 2 and waits for Resource 1 — both are stuck forever.",
+      formulas: "Banker's Algorithm: For each process, check if Need ≤ Available for all resource types.",
+      diagram: "graph TD\n  A[Process A] -->|holds| R1[Resource 1]\n  A -->|waits for| R2[Resource 2]\n  B[Process B] -->|holds| R2\n  B -->|waits for| R1\n  style A fill:#ff6b6b\n  style B fill:#ff6b6b",
+      relatedTopics: ['Process Management', 'CPU Scheduling', 'Memory Management'],
     },
     'matrices & systems': {
       definition: "Matrices & Systems represents the representation of systems of linear equations as rectangular arrays of coefficients to perform systematic reduction and solving.",
