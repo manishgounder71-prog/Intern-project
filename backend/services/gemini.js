@@ -596,7 +596,16 @@ export const generateQuiz = async (text, docTitle = 'Concept Quiz') => {
  */
 export async function* getGeminiChatStream(chatHistory, contextText, systemPromptOverride) {
   if (!HAS_AI_KEY) {
-    return null;
+    const mockWords = [
+      "Hello! I'm running in **Mock Mode** because no AI API key is configured.\n\n",
+      "Please add a `GEMINI_API_KEY` or `OPENROUTER_API_KEY` to your `.env` file.\n\n",
+      contextText ? `> ${contextText.split('\n')[0]?.substring(0, 100)}...\n\n` : '',
+      "Feel free to ask me anything, and I'll do my best!"
+    ];
+    for (const word of mockWords) {
+      yield word;
+    }
+    return;
   }
 
   const systemInstruction = systemPromptOverride || `You are an advanced, empathetic AI Study Companion.
@@ -739,7 +748,17 @@ Keep answers concise, formatted nicely in Markdown, and use bullet points where 
     }
   }
 
-  throw new Error('All configured AI streaming providers failed.');
+  // All providers failed — yield a graceful mock response
+  const mockWords = [
+    "Hello! I'm currently running in fallback mode because all AI providers are unavailable.\n\n",
+    "Based on your study materials, I found the following relevant context:\n",
+    contextText ? `\n> ${contextText.split('\n')[0]?.substring(0, 100)}...\n\n` : '',
+    "To get full AI-powered answers, please ensure a valid API key is configured.\n\n",
+    "In the meantime, feel free to ask me general questions about your subject!"
+  ];
+  for (const word of mockWords) {
+    yield word;
+  }
 }
 
 /**
