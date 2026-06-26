@@ -7,7 +7,8 @@ import {
   Menu, 
   Search, 
   Bell, 
-  TrendingUp
+  TrendingUp,
+  UserCircle
 } from 'lucide-react';
 import { useStudyStore } from '../store/useStudyStore';
 
@@ -22,6 +23,7 @@ const MainLayout: React.FC = () => {
     { name: 'Documents', path: '/library', icon: BookOpen },
     { name: 'Study Arena', path: '/arena', icon: MessageSquare },
     { name: 'Analytics', path: '/analytics', icon: TrendingUp },
+    { name: 'Profile', path: '/profile', icon: UserCircle },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -110,13 +112,13 @@ const MainLayout: React.FC = () => {
             </button>
 
             {user && (
-              <div className="w-8 h-8 rounded-full bg-[#222a3d] border border-white/10 overflow-hidden shadow-md">
+              <Link to="/profile" className="w-8 h-8 rounded-full bg-[#222a3d] border border-white/10 overflow-hidden shadow-md hover:ring-2 hover:ring-indigo-400 transition-all">
                 <img 
                   src={user.avatar} 
                   alt={user.name} 
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </Link>
             )}
           </div>
         </header>

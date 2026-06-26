@@ -10,6 +10,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Library = lazy(() => import('./pages/Library'));
 const StudyArena = lazy(() => import('./pages/StudyArena'));
 const Analytics = lazy(() => import('./pages/Analytics'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 const PageLoader: React.FC = () => (
   <div className="flex-1 flex flex-col items-center justify-center min-h-[500px] text-center space-y-4">
@@ -80,6 +81,7 @@ const App: React.FC = () => {
             <Route path="library" element={<Library />} />
             <Route path="arena" element={<StudyArena />} />
             <Route path="analytics" element={<Analytics />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
 
           {/* Fallback redirect */}

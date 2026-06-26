@@ -80,6 +80,7 @@ interface StudyState {
   setUser: (user: User | null) => void;
   logout: () => void;
   apiFetch: (path: string, options?: RequestInit) => Promise<any>;
+  updateProfile: (data: { name?: string; email?: string; avatar?: string }) => Promise<void>;
   
   // Library Actions
   fetchDocuments: () => Promise<void>;
@@ -126,6 +127,18 @@ export const useStudyStore = create<StudyState>((set, get) => ({
     localStorage.removeItem('study_token');
     localStorage.removeItem('study_user');
     set({ token: null, user: null, stats: null, documents: [], activeSubject: null, nodes: [], edges: [], selectedNode: null, chatHistory: [] });
+  },
+
+  updateProfile: async (data) => {
+    const result = await get().apiFetch('/auth/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (result.user) {
+      set({ user: result.user });
+      localStorage.setItem('study_user', JSON.stringify(result.user));
+    }
   },
 
   apiFetch: async (path, options = {}) => {
